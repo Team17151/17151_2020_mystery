@@ -69,10 +69,10 @@ public class WhosJoe extends LinearOpMode {
             this.BL.setPower(cSs * (double)this.gamepad1.left_stick_y - cAs * (double)this.gamepad1.left_stick_x - (double)this.gamepad1.right_stick_x);
             this.BR.setPower(cAs * (double)this.gamepad1.left_stick_y + cSs * (double)this.gamepad1.left_stick_x + (double)this.gamepad1.right_stick_x);
             */
-            TR.setPower(-((cSs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
-            TL.setPower((cAs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BL.setPower((cSs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BR.setPower(-((cAs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
+            TR.setPower(-((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
+            TL.setPower((cSs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
+            BL.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
+            BR.setPower(-((cSs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
             yoink1.setPower(-(gamepad1.left_trigger + gamepad1.right_trigger));
             yoink2.setPower(-(gamepad1.left_trigger + gamepad1.right_trigger));
             yeet1.setPower(-gamepad1.right_trigger);
