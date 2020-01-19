@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
@@ -17,7 +19,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
         name = "Joel",
         group = "use these"
 )
-public class WhosJoe extends LinearOpMode {
+public class FastArcade extends LinearOpMode {
     private DcMotor TR;
     private DcMotor TL;
     private DcMotor BL;
@@ -30,9 +32,6 @@ public class WhosJoe extends LinearOpMode {
     private Servo grab2;
     private BNO055IMU imu;
 
-    public WhosJoe() {
-    }
-
     public void runOpMode() {
         this.TR = (DcMotor)this.hardwareMap.dcMotor.get("TR");
         this.TL = (DcMotor)this.hardwareMap.dcMotor.get("TL");
@@ -44,10 +43,10 @@ public class WhosJoe extends LinearOpMode {
         yeet2 = hardwareMap.dcMotor.get("yeet2");
         grab1 = hardwareMap.servo.get("grab1");
         grab2 = hardwareMap.servo.get("grab2");
+        TL.setDirection(Direction.REVERSE);
+        BL.setDirection(Direction.REVERSE);
         float gyro;
         float mod = 0.0f;
-        double ra = 0.0D;
-        double thoth = 0.0D;
         Parameters parameters = new Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -63,16 +62,10 @@ public class WhosJoe extends LinearOpMode {
             }
             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(-gyro * Math.PI / 180D);
             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(-gyro * Math.PI / 180D);
-            /*
-            this.TR.setPower(cSs * (double)this.gamepad1.left_stick_y - cAs * (double)this.gamepad1.left_stick_x + (double)this.gamepad1.right_stick_x);
-            this.TL.setPower(cAs * (double)this.gamepad1.left_stick_y + cSs * (double)this.gamepad1.left_stick_x - (double)this.gamepad1.right_stick_x);
-            this.BL.setPower(cSs * (double)this.gamepad1.left_stick_y - cAs * (double)this.gamepad1.left_stick_x - (double)this.gamepad1.right_stick_x);
-            this.BR.setPower(cAs * (double)this.gamepad1.left_stick_y + cSs * (double)this.gamepad1.left_stick_x + (double)this.gamepad1.right_stick_x);
-            */
-            TR.setPower(-((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
-            TL.setPower((cSs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BL.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BR.setPower(-((cSs * gamepad1.left_stick_y) - (cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
+            TR.setPower((cSs * gamepad1.left_stick_y) - gamepad1.left_stick_x + gamepad1.right_stick_x);
+            TL.setPower((cAs * gamepad1.left_stick_y) + gamepad1.left_stick_x - gamepad1.right_stick_x);
+            BR.setPower((cAs * gamepad1.left_stick_y) + gamepad1.left_stick_x + gamepad1.right_stick_x);
+            BL.setPower((cSs * gamepad1.left_stick_y) - gamepad1.left_stick_x - gamepad1.right_stick_x);
             yoink1.setPower(-(gamepad1.left_trigger + gamepad1.right_trigger));
             yoink2.setPower(-(gamepad1.left_trigger + gamepad1.right_trigger));
             yeet1.setPower(-gamepad1.right_trigger);
@@ -89,7 +82,7 @@ public class WhosJoe extends LinearOpMode {
                 grab1.setPosition(0);
                 grab2.setPosition(1);
             }
-            this.telemetry.update();
+            telemetry.update();
         }
 
     }
