@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @Autonomous(
-        name = "AutoB"
+        name = "AutoRe"
 )
-public class AutoB extends LinearOpMode {
+public class AutoRe extends LinearOpMode {
     private DcMotor arm;
     private DcMotor TR;
     private DcMotor TL;
@@ -31,26 +31,27 @@ public class AutoB extends LinearOpMode {
         grab2.setPosition(0);
 
         Double z = 0D;
-        this.TL.setDirection(Direction.REVERSE);
-        this.BL.setDirection(Direction.REVERSE);
+        this.TR.setDirection(Direction.REVERSE);
+        this.BR.setDirection(Direction.REVERSE);
         this.waitForStart();
         if (this.opModeIsActive()) {
-            powerEach(-0.7,0.7,-0.7,0.7,400);
-            powerEach(-1D,-1D,-1D,-1D,1200);
+            powerEach(-1D,-1D,-1D,-1D,60);
+            powerEach(-0.7,0.7,-0.7,0.7,200);
+            powerEach(-1D,-1D,-1D,-1D,440);
             grab1.setPosition(0);
             grab2.setPosition(1);
-            powerEach(z,z,z,z,800);
-            powerEach(1D,1D,1D,1D,1200);
-            powerEach(0.7,-0.7,-0.7,0.7,1200);
+            powerEach(z,z,z,z,700);
+            powerEach(1D,1D,1D,1D,600);
+            powerEach(0.6,-0.6,1D,-1D,1500);
+            powerEach(-0.8,-1D,-0.8,-1D,1500);
             grab1.setPosition(1);
             grab2.setPosition(0);
-            sleep(400);
-            powerEach(1D,1D,1D,1D,1200);
+            powerEach(z,z,z,z,400);
+            powerEach(0.6,0.8,0.6,0.8,1000);
             powerEach(z,z,z,z,0);
         }
 
     }
-
     private void powerEach(Double TRink, Double TLink, Double BLink, Double BRink, Integer tim) {
         this.TR.setPower(TRink);
         this.TL.setPower(TLink);

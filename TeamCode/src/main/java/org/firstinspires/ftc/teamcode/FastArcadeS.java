@@ -1,25 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
-import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(
-        name = "Shuttle",
+        name = "Stack",
         group = "use these"
 )
-public class FastArcade extends LinearOpMode {
+public class FastArcadeS extends LinearOpMode {
     private DcMotor TR;
     private DcMotor TL;
     private DcMotor BL;
@@ -49,7 +44,7 @@ public class FastArcade extends LinearOpMode {
         float mod = 0.0f;
         Parameters parameters = new Parameters();
         parameters.mode = SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.angleUnit = AngleUnit.DEGREES;
         this.imu = (BNO055IMU)this.hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
         grab1.setPosition(1);
@@ -62,10 +57,10 @@ public class FastArcade extends LinearOpMode {
             }
             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(-gyro * Math.PI / 180D);
             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(-gyro * Math.PI / 180D);
-            TR.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
-            TL.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BR.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
-            BL.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
+            TR.setPower(Math.sqrt((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x)) + gamepad1.right_stick_x);
+            TL.setPower(Math.sqrt((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x)) - gamepad1.right_stick_x);
+            BR.setPower(Math.sqrt((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x)) + gamepad1.right_stick_x);
+            BL.setPower(Math.sqrt((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x)) - gamepad1.right_stick_x);
             yoink1.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
             yoink2.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
             yeet1.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
