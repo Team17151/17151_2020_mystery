@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @Autonomous(
-        name = "AutoRe"
+        name = "AutoRed"
 )
 public class AutoRe extends LinearOpMode {
     private DcMotor arm;
@@ -37,7 +37,7 @@ public class AutoRe extends LinearOpMode {
         if (this.opModeIsActive()) {
             powerEach(-1D,-1D,-1D,-1D,60);
             powerEach(-0.7,0.7,-0.7,0.7,200);
-            powerEach(-1D,-1D,-1D,-1D,440);
+            powerEach(-0.2D,-0.2D,-0.2D,-0.2D,5000);
             grab1.setPosition(0);
             grab2.setPosition(1);
             powerEach(z,z,z,z,700);
@@ -47,7 +47,10 @@ public class AutoRe extends LinearOpMode {
             grab1.setPosition(1);
             grab2.setPosition(0);
             powerEach(z,z,z,z,400);
-            powerEach(0.6,0.8,0.6,0.8,1000);
+            /*
+            powerEach(0.8,0.8,0.8,0.8,1100);
+            powerEach(-0.6,0.6,-1.0,1.0,600);
+            */
             powerEach(z,z,z,z,0);
         }
 

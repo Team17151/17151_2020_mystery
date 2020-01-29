@@ -9,10 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @Autonomous(
-        name = "AutoBlu"
+        name = "Basik"
 )
-public class AutoBl extends LinearOpMode {
-    private DcMotor arm;
+public class Basik extends LinearOpMode {
     private DcMotor TR;
     private DcMotor TL;
     private DcMotor BL;
@@ -35,22 +34,7 @@ public class AutoBl extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
         this.waitForStart();
         if (this.opModeIsActive()) {
-            powerEach(-1D,-1D,-1D,-1D,60);
-            powerEach(0.7,-0.7,0.7,-0.7,200);
-            powerEach(-0.2D,-0.2D,-0.2D,-0.2D,5000);
-            grab1.setPosition(0);
-            grab2.setPosition(1);
-            powerEach(z,z,z,z,700);
             powerEach(1D,1D,1D,1D,600);
-            powerEach(-0.6,0.6,-1D,1D,1500);
-            powerEach(-1D,-0.8,-1D,-0.8D,1500);
-            grab1.setPosition(1);
-            grab2.setPosition(0);
-            powerEach(z,z,z,z,400);
-            /*
-            powerEach(0.8,0.8,0.8,0.8,1100);
-            powerEach(0.6,-0.6,1.0,-1.0,600);
-            */
             powerEach(z,z,z,z,0);
         }
 

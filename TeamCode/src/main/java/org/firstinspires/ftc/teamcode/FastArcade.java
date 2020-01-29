@@ -1,18 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
-import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @TeleOp(
@@ -33,10 +27,10 @@ public class FastArcade extends LinearOpMode {
     private BNO055IMU imu;
 
     public void runOpMode() {
-        this.TR = (DcMotor)this.hardwareMap.dcMotor.get("TR");
-        this.TL = (DcMotor)this.hardwareMap.dcMotor.get("TL");
-        this.BL = (DcMotor)this.hardwareMap.dcMotor.get("BL");
-        this.BR = (DcMotor)this.hardwareMap.dcMotor.get("BR");
+        this.TR = this.hardwareMap.dcMotor.get("TR");
+        this.TL = this.hardwareMap.dcMotor.get("TL");
+        this.BL = this.hardwareMap.dcMotor.get("BL");
+        this.BR = this.hardwareMap.dcMotor.get("BR");
         yoink1 = hardwareMap.dcMotor.get("yoink1");
         yoink2 = hardwareMap.dcMotor.get("yoink2");
         yeet1 = hardwareMap.dcMotor.get("yeet1");
@@ -45,12 +39,16 @@ public class FastArcade extends LinearOpMode {
         grab2 = hardwareMap.servo.get("grab2");
         TL.setDirection(Direction.REVERSE);
         BL.setDirection(Direction.REVERSE);
-        float gyro;
-        float mod = 0.0f;
+        double gyro;
+        double mod = 0D;
+        double pTime = 0D;
+        double oTime;
+        double speed = 0D;
         Parameters parameters = new Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        this.imu = (BNO055IMU)this.hardwareMap.get(BNO055IMU.class, "imu");
+        parameters.accelUnit = BNO055IMU.AccelUnit.MILLI_EARTH_GRAVITY;
+        this.imu = hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
         grab1.setPosition(1);
         grab2.setPosition(0);
@@ -60,6 +58,9 @@ public class FastArcade extends LinearOpMode {
             if (this.gamepad1.x) {
                 mod = this.imu.getAngularOrientation().firstAngle;
             }
+            oTime = time - pTime;
+            pTime = time;
+            speed += oTime * imu.getLinearAcceleration().xAccel;
             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(-gyro * Math.PI / 180D);
             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(-gyro * Math.PI / 180D);
             TR.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
@@ -78,6 +79,9 @@ public class FastArcade extends LinearOpMode {
                 grab1.setPosition(0);
                 grab2.setPosition(1);
             }
+            telemetry.addData("thing1", imu.getLinearAcceleration());
+            telemetry.addData("thing2", speed);
+            telemetry.addData("fps", 1 / oTime);
             telemetry.update();
         }
 
