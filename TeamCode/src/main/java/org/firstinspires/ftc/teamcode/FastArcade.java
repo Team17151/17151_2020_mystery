@@ -43,11 +43,18 @@ public class FastArcade extends LinearOpMode {
         double mod = 0D;
         double pTime = 0D;
         double oTime;
-        double speed = 0D;
+        double xpeed = 0D;
+        double zpeed = 0D;
+        double aXel;
+        double aZel;
+        double cX = 0D;
+        double cZ = 0D;
+        double[][] stuf = new double[3][2];
+        String bigboi;
         Parameters parameters = new Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.MILLI_EARTH_GRAVITY;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         this.imu = hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
         grab1.setPosition(1);
@@ -60,7 +67,13 @@ public class FastArcade extends LinearOpMode {
             }
             oTime = time - pTime;
             pTime = time;
-            speed += oTime * imu.getLinearAcceleration().xAccel;
+            aXel = ((imu.getLinearAcceleration().xAccel * Math.cos(-gyro * Math.PI / 180)) - (Math.sin(-gyro * Math.PI / 180) * imu.getLinearAcceleration().zAccel));
+            aZel = ((imu.getLinearAcceleration().zAccel * Math.cos(-gyro * Math.PI / 180)) + (Math.sin(-gyro * Math.PI / 180) * imu.getLinearAcceleration().xAccel));
+            xpeed += oTime * aXel;
+            zpeed += oTime * aZel;
+            cX += oTime * xpeed;
+            cZ += oTime * zpeed;
+            bigboi = "";
             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(-gyro * Math.PI / 180D);
             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(-gyro * Math.PI / 180D);
             TR.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
@@ -79,8 +92,17 @@ public class FastArcade extends LinearOpMode {
                 grab1.setPosition(0);
                 grab2.setPosition(1);
             }
-            telemetry.addData("thing1", imu.getLinearAcceleration());
-            telemetry.addData("thing2", speed);
+            stuf[0][0] = aXel;
+            stuf[0][1] = aZel;
+            stuf[1][0] = xpeed;
+            stuf[1][1] = zpeed;
+            stuf[2][0] = cX;
+            stuf[2][1] = cZ;
+            for (int x = 0; x <= 2; x++) {
+                for (int y = 0; y <= 1; y++) {
+                    telemetry.addData(Integer.toString(x * 3 + y),Math.round(stuf[x][y] * 1000) / 1000);
+                }
+            }
             telemetry.addData("fps", 1 / oTime);
             telemetry.update();
         }
