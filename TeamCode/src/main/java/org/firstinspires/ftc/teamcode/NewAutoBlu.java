@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
@@ -10,9 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 
 @Autonomous(name = "newAutoBlu")
 public class NewAutoBlu extends LinearOpMode {
@@ -42,7 +39,7 @@ public class NewAutoBlu extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
         waitForStart();
         if (opModeIsActive()) {
-            move(-1.6D,.2D,0D,3D,.3D);
+            move(-1.6D,.2D,0D,30D,.3D);
             TR.setPower(0);
             TL.setPower(0);
             BR.setPower(0);
@@ -78,8 +75,13 @@ public class NewAutoBlu extends LinearOpMode {
              TL.setPower(MaxPower * (cAs * (x - cX)) + (-cSs * (z - cZ)) + ((Trot - gyro)/270));
              BL.setPower(MaxPower * (cSs * (x - cX)) + (cAs * (z - cZ)) + ((Trot - gyro)/270));
              BR.setPower(MaxPower * (cAs * (x - cX)) + (-cSs * (z - cZ)) + (-(Trot - gyro)/270));
-             telemetry.addData("bubba", "\n" + Double.toString(cX) + "\n" + Double.toString(cZ));
-             telemetry.update();
+             telemetry.addData("Gyro", gyro);
+             telemetry.addData("oTime", otime);
+             telemetry.addData("aXel", aXel);
+             telemetry.addData("aZel", aZel);
+            telemetry.addData("bubba", "\n" + Double.toString(cX) + "\n" + Double.toString(cZ));
+
+            telemetry.update();
         }
     }
     public void move(Double x, Double z, Double Trot, Double MaxT) {
