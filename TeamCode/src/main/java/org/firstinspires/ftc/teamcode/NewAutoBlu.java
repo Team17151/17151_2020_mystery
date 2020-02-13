@@ -10,9 +10,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name = "newAutoBlu")
 public class NewAutoBlu extends LinearOpMode {
+
+    //PID Coefficents
+    double kP = 0.003;
+    double kI = 0.00003;
+    double kD = 0;
+
     private DcMotor TR;
     private DcMotor TL;
     private DcMotor BL;
@@ -20,33 +27,40 @@ public class NewAutoBlu extends LinearOpMode {
     private Servo grab1;
     private Servo grab2;
     private BNO055IMU imu;
+    private PIDController turnPID;
     public void runOpMode() {
+
         this.TR = this.hardwareMap.dcMotor.get("TR");
         this.TL = this.hardwareMap.dcMotor.get("TL");
         this.BL = this.hardwareMap.dcMotor.get("BL");
         this.BR = this.hardwareMap.dcMotor.get("BR");
         grab1 = hardwareMap.servo.get("grab1");
         grab2 = hardwareMap.servo.get("grab2");
+
         Parameters parameters = new Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         this.imu = hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
+
         grab1.setPosition(1);
         grab2.setPosition(0);
         this.TR.setDirection(Direction.REVERSE);
         this.BR.setDirection(Direction.REVERSE);
+
+        turnPID = new PIDController(kP, kI, kD);
         waitForStart();
         if (opModeIsActive()) {
-            move(-1.6D,.2D,0D,30D,.3D);
+//            move(-1.6D,.2D,0D,30D,.3D);
+            rotate(100);
             TR.setPower(0);
             TL.setPower(0);
             BR.setPower(0);
             BL.setPower(0);
         }
     }
-    public void move(Double x, Double z, Double Trot, Double MaxT, Double MaxPower) {
+    /*public void move(Double x, Double z, Double Trot, Double MaxT, Double MaxPower) {
         double stime = time;
         double ptime = time;
         double otime;
@@ -57,7 +71,6 @@ public class NewAutoBlu extends LinearOpMode {
         double aXel;
         double aZel;
         double gyro;
-        double gyyg;
         double sg = -imu.getAngularOrientation().firstAngle;
         while (time < stime + MaxT) {
              gyro = -imu.getAngularOrientation().firstAngle - sg;
@@ -80,11 +93,63 @@ public class NewAutoBlu extends LinearOpMode {
              telemetry.addData("aXel", aXel);
              telemetry.addData("aZel", aZel);
             telemetry.addData("bubba", "\n" + Double.toString(cX) + "\n" + Double.toString(cZ));
-
             telemetry.update();
         }
-    }
-    public void move(Double x, Double z, Double Trot, Double MaxT) {
+    }*/
+    /*public void move(Double x, Double z, Double Trot, Double MaxT) {
         move(x,z, Trot, MaxT,1D);
+    }*/
+    public void move() {
+        //rotate();
+    }
+
+    public void rotate(double Trot){
+        double gyro = getAngle(-imu.getAngularOrientation().firstAngle);
+        double setpoint = getAngle(gyro + Trot);
+        turnPID.reset();
+        double el = 0;
+        turnPID.setSetpoint(setpoint);
+        turnPID.setInputRange(0, 359.9);
+        turnPID.setOutputRange(0, 1);
+        turnPID.setTolerance(1);
+        turnPID.enable();
+        //while(!turnPID.onTarget()) {
+            if (setpoint > 0) {
+                double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+                while (!turnPID.onTarget()){
+                    TL.setPower(power);
+                    BL.setPower(power);
+                    TR.setPower(-power);
+                    BR.setPower(-power);
+                    telemetry.addData("All Done!", setpoint);
+                    telemetry.addData("All Done!!!!!!!", el);
+                    telemetry.update();
+                    el++;
+                    power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+                }
+            } else {
+                double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+                while (!turnPID.onTarget()) {
+                    TL.setPower(-power);
+                    BL.setPower(-power);
+                    TR.setPower(power);
+                    BR.setPower(power);
+                    telemetry.addData("All Done!", setpoint);
+                    telemetry.addData("All Done!!!!!!!", el);
+                    telemetry.update();
+                    el++;
+                    power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+                }
+            }
+        TL.setPower(0);
+        BL.setPower(0);
+        TR.setPower(0);
+        BR.setPower(0);
+    }
+    private double getAngle(double angl){
+        if (angl < 0) {
+            return 360 + angl;
+        }
+        return angl;
     }
 }
