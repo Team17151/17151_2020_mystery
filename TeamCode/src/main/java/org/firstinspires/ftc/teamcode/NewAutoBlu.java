@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
@@ -8,6 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 @Autonomous(name = "newAutoBlu")
@@ -38,10 +42,14 @@ public class NewAutoBlu extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
         waitForStart();
         if (opModeIsActive()) {
-
+            move(-1.6D,.2D,0D,3D,.3D);
+            TR.setPower(0);
+            TL.setPower(0);
+            BR.setPower(0);
+            BL.setPower(0);
         }
     }
-    public void move(Double x, Double z, Double MaxT, Double Trot, Double MaxPower) {
+    public void move(Double x, Double z, Double Trot, Double MaxT, Double MaxPower) {
         double stime = time;
         double ptime = time;
         double otime;
@@ -51,29 +59,27 @@ public class NewAutoBlu extends LinearOpMode {
         double cZ = 0D;
         double aXel;
         double aZel;
-        double gyro = 0D;
+        double gyro;
+        double gyyg;
         double sg = -imu.getAngularOrientation().firstAngle;
-        /*Double[] f = {1D,1D,1D,1D};
-        Double[] b = {-1D,-1D,-1D,-1D};
-        Double[] l = {-1D,1D,-1D,1D};
-        Double[] r = {1D,-1D,1D,-1D};
-        Double[] c = {1D,1D,-1D,-1D};
-        Double[] w = {-1D,-1D,1D,1D};*/
         while (time < stime + MaxT) {
-             gyro = imu.getAngularOrientation().firstAngle - sg;
+             gyro = -imu.getAngularOrientation().firstAngle - sg;
              otime = time - ptime;
              ptime = time;
-             otime = time - ptime;
-             ptime = time;
-             aXel = ((imu.getLinearAcceleration().xAccel * Math.cos(-gyro * Math.PI / 180)) - (Math.sin(-gyro * Math.PI / 180) * imu.getLinearAcceleration().zAccel));
-             aZel = ((imu.getLinearAcceleration().zAccel * Math.cos(-gyro * Math.PI / 180)) + (Math.sin(-gyro * Math.PI / 180) * imu.getLinearAcceleration().xAccel));
+             aXel = ((imu.getLinearAcceleration().xAccel * Math.cos(gyro * Math.PI / 180)) - (Math.sin(gyro * Math.PI / 180) * imu.getLinearAcceleration().zAccel));
+             aZel = ((imu.getLinearAcceleration().zAccel * Math.cos(gyro * Math.PI / 180)) + (Math.sin(gyro * Math.PI / 180) * imu.getLinearAcceleration().xAccel));
              xpeed += otime * aXel;
              zpeed += otime * aZel;
              cX += otime * xpeed;
              cZ += otime * zpeed;
-             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(gyro * Math.PI / 180D);
-             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(gyro * Math.PI / 180D);
-             TR.setPower(/*x*/((cX - x)));
+             double cSs = Math.cos(gyro * Math.PI / 180D) - Math.sin(gyro * Math.PI / 180D);
+             double cAs = Math.sin(gyro * Math.PI / 180D) + Math.cos(gyro * Math.PI / 180D);
+             TR.setPower(MaxPower * (cSs * (x - cX)) + (cAs * (z - cZ)) + (-(Trot - gyro)/270));
+             TL.setPower(MaxPower * (cAs * (x - cX)) + (-cSs * (z - cZ)) + ((Trot - gyro)/270));
+             BL.setPower(MaxPower * (cSs * (x - cX)) + (cAs * (z - cZ)) + ((Trot - gyro)/270));
+             BR.setPower(MaxPower * (cAs * (x - cX)) + (-cSs * (z - cZ)) + (-(Trot - gyro)/270));
+             telemetry.addData("bubba", "\n" + Double.toString(cX) + "\n" + Double.toString(cZ));
+             telemetry.update();
         }
     }
     public void move(Double x, Double z, Double Trot, Double MaxT) {

@@ -116,10 +116,6 @@ public class FastArcade extends LinearOpMode {
                 }
             }
             telemetry.addData("fps", 1 / oTime);
-            telemetry.addData("red",veryvery.red());
-            telemetry.addData("grn",veryvery.green());
-            telemetry.addData("blu",veryvery.blue());
-            telemetry.addData("wierd",(veryvery.red() + veryvery.green())/veryvery.blue());
             telemetry.update();
         }
 
