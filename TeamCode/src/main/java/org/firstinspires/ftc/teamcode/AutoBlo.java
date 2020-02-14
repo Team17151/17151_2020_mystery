@@ -57,10 +57,11 @@ public class AutoBlo extends LinearOpMode {
     private void stabl() {
         double gyro = -imu.getAngularOrientation().firstAngle;
         while (gyro < -10 || gyro > 10 && opModeIsActive()) {
-            TR.setPower(gyro / 90);
-            TL.setPower(-gyro / 90);
-            BL.setPower(-gyro / 90);
-            BR.setPower(gyro / 90);
+            gyro = -imu.getAngularOrientation().firstAngle;
+            TR.setPower(gyro / 120);
+            TL.setPower(-gyro / 120);
+            BL.setPower(-gyro / 120);
+            BR.setPower(gyro / 120);
             telemetry.addData("geero",gyro);
             telemetry.update();
         }
