@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
@@ -9,6 +11,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @TeleOp(
         name = "Shuttle",
@@ -28,12 +31,14 @@ public class FastArcade extends LinearOpMode {
     private Servo clawboi;
     private BNO055IMU imu;
     private ColorSensor veryvery;
+    private VoltageSensor voltageSensor;
 
     public void runOpMode() {
         this.TR = this.hardwareMap.dcMotor.get("TR");
         this.TL = this.hardwareMap.dcMotor.get("TL");
         this.BL = this.hardwareMap.dcMotor.get("BL");
         this.BR = this.hardwareMap.dcMotor.get("BR");
+//        voltageSensor = hardwareMap.voltageSensor.get("");
         yoink1 = hardwareMap.dcMotor.get("yoink1");
         yoink2 = hardwareMap.dcMotor.get("yoink2");
         yeet1 = hardwareMap.dcMotor.get("yeet1");
@@ -54,6 +59,7 @@ public class FastArcade extends LinearOpMode {
         double aZel;
         double cX = 0D;
         double cZ = 0D;
+        float[] hsv = new float[3];
         double[][] stuf = new double[3][2];
         String[] stufstr = {"xlr8 ","fast ","true "};
         Parameters parameters = new Parameters();
@@ -115,6 +121,7 @@ public class FastArcade extends LinearOpMode {
                 }
             }
             telemetry.addData("fps", 1 / oTime);
+            telemetry.addData("colors", veryvery.red() + " " + veryvery.blue());
             telemetry.update();
         }
 

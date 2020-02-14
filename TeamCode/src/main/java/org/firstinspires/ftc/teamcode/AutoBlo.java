@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @Autonomous(
         name = "AutoBlo"
@@ -20,6 +21,7 @@ public class AutoBlo extends LinearOpMode {
     private Servo grab1;
     private Servo grab2;
     private BNO055IMU imu;
+    private VoltageSensor voltageSensor;
 
     public void runOpMode() {
         this.TR = (DcMotor)this.hardwareMap.dcMotor.get("TR");
@@ -33,7 +35,7 @@ public class AutoBlo extends LinearOpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        this.imu = (BNO055IMU)this.hardwareMap.get(BNO055IMU.class, "imu");
+        this.imu = hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
 
         Double z = 0D;
@@ -41,7 +43,8 @@ public class AutoBlo extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
         this.waitForStart();
         if (this.opModeIsActive()) {
-            powerEach(-.35D,.35D,-.5D,.5D,2000);
+            powerEach(-.35D,.35D,-.5D,.5D,1500);
+
             powerEach(z,z,z,z,0);
         }
 
@@ -58,10 +61,10 @@ public class AutoBlo extends LinearOpMode {
         double gyro = -imu.getAngularOrientation().firstAngle;
         while (gyro < -10 || gyro > 10 && opModeIsActive()) {
             gyro = -imu.getAngularOrientation().firstAngle;
-            TR.setPower(gyro / 120);
-            TL.setPower(-gyro / 120);
-            BL.setPower(-gyro / 120);
-            BR.setPower(gyro / 120);
+            TR.setPower(gyro / 50);
+            TL.setPower(-gyro / 50);
+            BL.setPower(-gyro / 50);
+            BR.setPower(gyro / 50);
             telemetry.addData("geero",gyro);
             telemetry.update();
         }
