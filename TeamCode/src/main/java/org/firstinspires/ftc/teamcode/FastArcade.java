@@ -46,7 +46,7 @@ public class FastArcade extends LinearOpMode {
         grab1 = hardwareMap.servo.get("grab1");
         grab2 = hardwareMap.servo.get("grab2");
         clawboi = hardwareMap.servo.get("clawboi");
-        veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
+//        veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
         //Assign the voltage sensor object to a motor controller
         //I don't know why this is how the API is designed... but it is...
         voltageSensor = hardwareMap.voltageSensor.get("TR");
@@ -125,7 +125,7 @@ public class FastArcade extends LinearOpMode {
             }
             telemetry.addData("fps", 1 / oTime);
             //print voltage
-            telemetry.addData("Current Voltage", voltageSensor.getVoltage());
+//            telemetry.addData("Current Voltage", voltageSensor.getVoltage());
             telemetry.addData("colors", veryvery.red() + " " + veryvery.blue());
             telemetry.update();
         }

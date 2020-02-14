@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,6 +23,7 @@ public class AutoBlo extends LinearOpMode {
     private Servo grab2;
     private BNO055IMU imu;
     private VoltageSensor voltageSensor;
+    private ColorSensor veryvery;
 
     public void runOpMode() {
         this.TR = (DcMotor)this.hardwareMap.dcMotor.get("TR");
@@ -32,19 +34,22 @@ public class AutoBlo extends LinearOpMode {
         grab2 = hardwareMap.servo.get("grab2");
         grab1.setPosition(1);
         grab2.setPosition(0);
+        veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         this.imu = hardwareMap.get(BNO055IMU.class, "imu");
         this.imu.initialize(parameters);
-
         Double z = 0D;
         this.TR.setDirection(Direction.REVERSE);
         this.BR.setDirection(Direction.REVERSE);
         this.waitForStart();
         if (this.opModeIsActive()) {
             powerEach(-.35D,.35D,-.5D,.5D,1500);
-
+            sleep(100);
+            if (veryvery.red() < 280) {
+                powerEach(-.7,.7,-1D,1D,300);
+            }
             powerEach(z,z,z,z,0);
         }
 
