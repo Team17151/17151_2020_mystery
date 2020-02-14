@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @TeleOp(
         name = "Shuttle",
@@ -28,6 +29,8 @@ public class FastArcade extends LinearOpMode {
     private Servo clawboi;
     private BNO055IMU imu;
     private ColorSensor veryvery;
+    //Declare a voltage sensor object
+    private VoltageSensor voltageSensor;
 
     public void runOpMode() {
         this.TR = this.hardwareMap.dcMotor.get("TR");
@@ -42,6 +45,9 @@ public class FastArcade extends LinearOpMode {
         grab2 = hardwareMap.servo.get("grab2");
         clawboi = hardwareMap.servo.get("clawboi");
         veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
+        //Assign the voltage sensor object to a motor controller
+        //I don't know why this is how the API is designed... but it is...
+        voltageSensor = hardwareMap.voltageSensor.get("TR");
         TL.setDirection(Direction.REVERSE);
         BL.setDirection(Direction.REVERSE);
         double gyro;
@@ -115,6 +121,8 @@ public class FastArcade extends LinearOpMode {
                 }
             }
             telemetry.addData("fps", 1 / oTime);
+            //print voltage
+            telemetry.addData("Current Voltage", voltageSensor.getVoltage());
             telemetry.update();
         }
 
