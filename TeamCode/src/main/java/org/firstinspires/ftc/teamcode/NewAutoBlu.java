@@ -103,7 +103,7 @@ public class NewAutoBlu extends LinearOpMode {
         move(x,z, Trot, MaxT,1D);
     }*/
     public void rotate(double Trot){
-        double setpoint = getAngle(-imu.getAngularOrientation().firstAngle) + Trot;
+        double setpoint = getAngle(Trot);
         turnPID.reset();
         turnPID.setSetpoint(setpoint);
         turnPID.setInputRange(0, 359);
@@ -112,29 +112,29 @@ public class NewAutoBlu extends LinearOpMode {
         turnPID.setTolerance(1);
         turnPID.enable();
         //while(!turnPID.onTarget()) {
-            if (setpoint > 0) {
-                double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
-                while (!turnPID.onTarget()){
-                    TL.setPower(power);
-                    BL.setPower(power);
-                    TR.setPower(-power);
-                    BR.setPower(-power);
-                    telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
-                    telemetry.update();
-                    power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
-                }
-            } else {
-                double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
-                while (!turnPID.onTarget()) {
-                    TL.setPower(-power);
-                    BL.setPower(-power);
-                    TR.setPower(power);
-                    BR.setPower(power);
-                    telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
-                    telemetry.update();
-                    power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
-                }
+        if (setpoint > 0) {
+            double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+            while (!turnPID.onTarget()){
+                TL.setPower(power);
+                BL.setPower(power);
+                TR.setPower(-power);
+                BR.setPower(-power);
+                telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
+                telemetry.update();
+                power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
             }
+        } else {
+            double power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+            while (!turnPID.onTarget()) {
+                TL.setPower(-power);
+                BL.setPower(-power);
+                TR.setPower(power);
+                BR.setPower(power);
+                telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
+                telemetry.update();
+                power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
+            }
+        }
         TL.setPower(0);
         BL.setPower(0);
         TR.setPower(0);
