@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU.Parameters;
 import com.qualcomm.hardware.bosch.BNO055IMU.SensorMode;
@@ -29,7 +31,6 @@ public class FastArcade extends LinearOpMode {
     private Servo clawboi;
     private BNO055IMU imu;
     private ColorSensor veryvery;
-    //Declare a voltage sensor object
     private VoltageSensor voltageSensor;
 
     public void runOpMode() {
@@ -37,6 +38,7 @@ public class FastArcade extends LinearOpMode {
         this.TL = this.hardwareMap.dcMotor.get("TL");
         this.BL = this.hardwareMap.dcMotor.get("BL");
         this.BR = this.hardwareMap.dcMotor.get("BR");
+//        voltageSensor = hardwareMap.voltageSensor.get("");
         yoink1 = hardwareMap.dcMotor.get("yoink1");
         yoink2 = hardwareMap.dcMotor.get("yoink2");
         yeet1 = hardwareMap.dcMotor.get("yeet1");
@@ -60,6 +62,7 @@ public class FastArcade extends LinearOpMode {
         double aZel;
         double cX = 0D;
         double cZ = 0D;
+        float[] hsv = new float[3];
         double[][] stuf = new double[3][2];
         String[] stufstr = {"xlr8 ","fast ","true "};
         Parameters parameters = new Parameters();
@@ -123,6 +126,7 @@ public class FastArcade extends LinearOpMode {
             telemetry.addData("fps", 1 / oTime);
             //print voltage
             telemetry.addData("Current Voltage", voltageSensor.getVoltage());
+            telemetry.addData("colors", veryvery.red() + " " + veryvery.blue());
             telemetry.update();
         }
 
