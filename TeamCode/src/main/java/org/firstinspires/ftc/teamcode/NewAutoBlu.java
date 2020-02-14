@@ -16,10 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class NewAutoBlu extends LinearOpMode {
 
     //PID Coefficents
-    double kP = 0.003;
-    double kI = 0.00003;
+    double kP = 0.009;
+    double kI = 0.00009;
     double kD = 0;
-
+    //PID 2
     private DcMotor TR;
     private DcMotor TL;
     private DcMotor BL;
@@ -28,6 +28,7 @@ public class NewAutoBlu extends LinearOpMode {
     private Servo grab2;
     private BNO055IMU imu;
     private PIDController turnPID;
+    private PIDController movePID;
     public void runOpMode() {
 
         this.TR = this.hardwareMap.dcMotor.get("TR");
@@ -50,10 +51,12 @@ public class NewAutoBlu extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
 
         turnPID = new PIDController(kP, kI, kD);
+        movePID = new PIDController(1,0.1,0);
         waitForStart();
         if (opModeIsActive()) {
 //            move(-1.6D,.2D,0D,30D,.3D);
-            rotate(100);
+//            rotate(300);
+
             TR.setPower(0);
             TL.setPower(0);
             BR.setPower(0);
@@ -99,17 +102,12 @@ public class NewAutoBlu extends LinearOpMode {
     /*public void move(Double x, Double z, Double Trot, Double MaxT) {
         move(x,z, Trot, MaxT,1D);
     }*/
-    public void move() {
-        //rotate();
-    }
-
     public void rotate(double Trot){
-        double gyro = getAngle(-imu.getAngularOrientation().firstAngle);
-        double setpoint = getAngle(gyro + Trot);
+        double setpoint = getAngle(-imu.getAngularOrientation().firstAngle) + Trot;
         turnPID.reset();
-        double el = 0;
         turnPID.setSetpoint(setpoint);
-        turnPID.setInputRange(0, 359.9);
+        turnPID.setInputRange(0, 359);
+        turnPID.setContinuous();
         turnPID.setOutputRange(0, 1);
         turnPID.setTolerance(1);
         turnPID.enable();
@@ -121,10 +119,8 @@ public class NewAutoBlu extends LinearOpMode {
                     BL.setPower(power);
                     TR.setPower(-power);
                     BR.setPower(-power);
-                    telemetry.addData("All Done!", setpoint);
-                    telemetry.addData("All Done!!!!!!!", el);
+                    telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
                     telemetry.update();
-                    el++;
                     power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
                 }
             } else {
@@ -134,10 +130,8 @@ public class NewAutoBlu extends LinearOpMode {
                     BL.setPower(-power);
                     TR.setPower(power);
                     BR.setPower(power);
-                    telemetry.addData("All Done!", setpoint);
-                    telemetry.addData("All Done!!!!!!!", el);
+                    telemetry.addData("rot", -imu.getAngularOrientation().firstAngle);
                     telemetry.update();
-                    el++;
                     power = turnPID.performPID(getAngle(-imu.getAngularOrientation().firstAngle));
                 }
             }
