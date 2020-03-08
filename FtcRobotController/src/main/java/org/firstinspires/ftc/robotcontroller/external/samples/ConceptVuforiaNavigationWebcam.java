@@ -457,5 +457,5 @@ public class ConceptVuforiaNavigationWebcam extends LinearOpMode {
                 }
             }
         }));
-    }
+}
 }

@@ -45,13 +45,13 @@ public class AutoBlo extends LinearOpMode {
         this.BR.setDirection(Direction.REVERSE);
         this.waitForStart();
         if (this.opModeIsActive()) {
-            powerEach(-.35D,.35D,-.5D,.5D,1500);
+            powerEach(-.35D,.35D,-.5D,.5D,1600);
             sleep(100);
-            if (veryvery.red() < 280) {
+            if (veryvery.red() < 240) {
                 powerEach(-.7,.7,-1D,1D,300);
             }
-            powerEach(z,z,z,z,0);
-        }
+            powerEach(z,z,z,z,0);        }
+
 
     }
     private void powerEach(Double TRink, Double TLink, Double BLink, Double BRink, Integer tim) {
@@ -60,22 +60,5 @@ public class AutoBlo extends LinearOpMode {
         this.BL.setPower(BLink);
         this.BR.setPower(BRink);
         this.sleep(tim);
-        stabl();
-    }
-    private void stabl() {
-        double gyro = -imu.getAngularOrientation().firstAngle;
-        while (gyro < -10 || gyro > 10 && opModeIsActive()) {
-            gyro = -imu.getAngularOrientation().firstAngle;
-            TR.setPower(gyro / 50);
-            TL.setPower(-gyro / 50);
-            BL.setPower(-gyro / 50);
-            BR.setPower(gyro / 50);
-            telemetry.addData("geero",gyro);
-            telemetry.update();
-        }
-        TR.setPower(0);
-        TL.setPower(0);
-        BL.setPower(0);
-        BR.setPower(0);
     }
 }

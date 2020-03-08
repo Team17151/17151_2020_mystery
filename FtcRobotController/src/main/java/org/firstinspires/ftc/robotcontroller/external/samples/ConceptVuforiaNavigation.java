@@ -68,7 +68,6 @@ import java.util.List;
  *
  * A final calculation then uses the location of the camera on the robot to determine the
  * robot's location and orientation on the field.
- *
  * @see VuforiaLocalizer
  * @see VuforiaTrackableDefaultListener
  * see  ftc_app/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf

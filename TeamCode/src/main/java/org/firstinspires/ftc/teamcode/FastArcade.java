@@ -46,13 +46,14 @@ public class FastArcade extends LinearOpMode {
         grab1 = hardwareMap.servo.get("grab1");
         grab2 = hardwareMap.servo.get("grab2");
         clawboi = hardwareMap.servo.get("clawboi");
-//        veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
+        veryvery = hardwareMap.get(ColorSensor.class, "veryvery");
         //Assign the voltage sensor object to a motor controller
         //I don't know why this is how the API is designed... but it is...
-        voltageSensor = hardwareMap.voltageSensor.get("TR");
+//        voltageSensor = hardwareMap.voltageSensor.get("TR");
         TL.setDirection(Direction.REVERSE);
         BL.setDirection(Direction.REVERSE);
         double gyro;
+        double tong;
         double mod = 0D;
         double pTime = 0D;
         double oTime;
@@ -76,9 +77,13 @@ public class FastArcade extends LinearOpMode {
         this.waitForStart();
         pTime = time;
         while(this.opModeIsActive()) {
+            tong = 1;
             gyro = imu.getAngularOrientation().firstAngle - mod;
             if (this.gamepad1.x) {
                 mod = this.imu.getAngularOrientation().firstAngle;
+            }
+            if (gamepad1.left_stick_button) {
+                tong = 0.3;
             }
             oTime = time - pTime;
             pTime = time;
@@ -90,10 +95,10 @@ public class FastArcade extends LinearOpMode {
             cZ += oTime * zpeed;
             double cSs = Math.cos(-gyro * Math.PI / 180D) - Math.sin(-gyro * Math.PI / 180D);
             double cAs = Math.sin(-gyro * Math.PI / 180D) + Math.cos(-gyro * Math.PI / 180D);
-            TR.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
-            TL.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
-            BR.setPower((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x);
-            BL.setPower((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x);
+            TR.setPower(tong * ((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
+            TL.setPower(tong * ((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) - gamepad1.right_stick_x));
+            BR.setPower(tong * ((cAs * gamepad1.left_stick_y) + (cSs * gamepad1.left_stick_x) + gamepad1.right_stick_x));
+            BL.setPower(tong * ((cSs * gamepad1.left_stick_y) + (-cAs * gamepad1.left_stick_x) - gamepad1.right_stick_x));
             yoink1.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
             yoink2.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
             yeet1.setPower(gamepad1.left_trigger - gamepad1.right_trigger);

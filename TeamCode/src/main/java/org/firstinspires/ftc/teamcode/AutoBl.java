@@ -29,7 +29,6 @@ public class AutoBl extends LinearOpMode {
         grab2 = hardwareMap.servo.get("grab2");
         grab1.setPosition(1);
         grab2.setPosition(0);
-
         Double z = 0D;
         this.TR.setDirection(Direction.REVERSE);
         this.BR.setDirection(Direction.REVERSE);
@@ -37,20 +36,17 @@ public class AutoBl extends LinearOpMode {
         if (this.opModeIsActive()) {
             powerEach(-1D,-1D,-1D,-1D,60);
             powerEach(0.7,-0.7,0.7,-0.7,200);
-            powerEach(-0.2D,-0.2D,-0.2D,-0.2D,5000);
+            powerEach(-0.2D,-0.2D,-0.2D,-0.2D,3200);
             grab1.setPosition(0);
             grab2.setPosition(1);
             powerEach(z,z,z,z,700);
-            powerEach(1D,1D,1D,1D,600);
+            powerEach(0.5,0.5,0.5,0.5,1300);
             powerEach(-0.6,0.6,-1D,1D,1500);
             powerEach(-1D,-0.8,-1D,-0.8D,1500);
             grab1.setPosition(1);
             grab2.setPosition(0);
             powerEach(z,z,z,z,400);
-            /*
-            powerEach(0.8,0.8,0.8,0.8,1100);
-            powerEach(0.6,-0.6,1.0,-1.0,600);
-            */
+            powerEach(0.7,0.7,0.7,0.7,900);
             powerEach(z,z,z,z,0);
         }
 
