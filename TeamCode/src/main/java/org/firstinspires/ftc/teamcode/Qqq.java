@@ -52,6 +52,8 @@ public class Qqq extends LinearOpMode {
             // Put run blocks here.
             boolean endloop = false;
             double zangle;
+            int inc = 0;
+            clawboi.setPosition(0);
             TR.setPower(-0.4);
             TL.setPower(0.4D);
             BR.setPower(0.8D);
@@ -68,17 +70,17 @@ public class Qqq extends LinearOpMode {
                     TL.setPower(0);
                     endloop = true;
                 } else {
-                    telemetry.addData("No Targets Detected", "Targets are not visible.");
                     TR.setPower(.23);
                     BR.setPower(.23);
                     BL.setPower(.23);
                     TL.setPower(.23);
-                    sleep(350);
+                    sleep(300);
                     TR.setPower(z);
                     BR.setPower(z);
                     BL.setPower(z);
                     TL.setPower(z);
-                    sleep(400);
+                    sleep(200);
+                    inc++;
                 }
                 telemetry.update();
             }
@@ -87,10 +89,10 @@ public class Qqq extends LinearOpMode {
             while (isTargetVisible("Stone Target") && opModeIsActive() && ((-82 < zangle) || (-98 > zangle))) {
                 zangle = Double.parseDouble(JavaUtil.formatNumber(vuforiaResults.zAngle, 2));
                 boold = Math.signum(zangle + 90);
-                TR.setPower(.2 * -boold);
-                TL.setPower(.2 * boold);
-                BR.setPower(.2 * -boold);
-                BL.setPower(.2 * boold);
+                TR.setPower(.3 * -boold);
+                TL.setPower(.3 * boold);
+                BR.setPower(.3 * -boold);
+                BL.setPower(.3 * boold);
                 processTarget();
                 telemetry.update();
             }
@@ -100,19 +102,19 @@ public class Qqq extends LinearOpMode {
             TL.setPower(z);
             sleep(200);
             zangle = Double.parseDouble(JavaUtil.formatNumber(displayValue(vuforiaResults.y, "IN"), 2));
-            while (isTargetVisible("Stone Target") && opModeIsActive() && ((-1 < zangle) || (-1.8 > zangle))) {
+            while (isTargetVisible("Stone Target") && opModeIsActive() && ((-1.5 < zangle) || (-1.7 > zangle))) {
                 zangle = Double.parseDouble(JavaUtil.formatNumber(displayValue(vuforiaResults.y, "IN"), 2));
                 boold = Math.signum(zangle + 1);
                 TR.setPower(boold * .2);
                 TL.setPower(boold * .2);
                 BL.setPower(boold * .2);
                 BR.setPower(boold * .2);
-                sleep(75);
+                sleep(50);
                 TR.setPower(z);
                 BR.setPower(z);
                 BL.setPower(z);
                 TL.setPower(z);
-                sleep(75);
+                sleep(100);
                 processTarget();
                 telemetry.update();
             }
@@ -133,12 +135,47 @@ public class Qqq extends LinearOpMode {
                 sleep(100);
             }
             clawboi.setPosition(.6);
-            sleep(1000);
-            TR.setPower(0.4);
-            TL.setPower(-0.4D);
-            BR.setPower(-0.8D);
-            BL.setPower(0.8);
             sleep(500);
+            TR.setPower(0.5);
+            TL.setPower(-0.5D);
+            BR.setPower(-0.7D);
+            BL.setPower(0.7);
+            sleep(1000);
+            for (inc = inc; inc > 0; inc--) {
+                TR.setPower(-.22 + .044);
+                BR.setPower(-.22 + .044);
+                BL.setPower(-.22 - .044);
+                TL.setPower(-.22 - .044);
+                sleep(500);
+                TR.setPower(z);
+                BR.setPower(z);
+                BL.setPower(z);
+                TL.setPower(z);
+                sleep(400);
+            }
+            TR.setPower(-.4);
+            BR.setPower(-.4);
+            BL.setPower(-.6);
+            TL.setPower(-.6);
+            sleep(600);
+            TR.setPower(z);
+            BR.setPower(z);
+            BL.setPower(z);
+            TL.setPower(z);
+            clawboi.setPosition(0);
+            sleep(500);
+            while (!isTargetVisible("Blue Perimeter 2") && opModeIsActive()) {
+                TR.setPower(-.3);
+                TL.setPower(.3);
+                BR.setPower(-.3);
+                BL.setPower(.3);
+                sleep(300);
+                TR.setPower(z);
+                BR.setPower(z);
+                BL.setPower(z);
+                TL.setPower(z);
+                sleep(400);
+            }
         }
         // Don't forget to deactivate Vuforia.
         vuforiaSkyStone.deactivate();

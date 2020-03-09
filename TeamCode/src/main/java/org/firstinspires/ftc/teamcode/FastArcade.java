@@ -82,7 +82,7 @@ public class FastArcade extends LinearOpMode {
             if (this.gamepad1.x) {
                 mod = this.imu.getAngularOrientation().firstAngle;
             }
-            if (gamepad1.left_stick_button) {
+            if (gamepad1.y) {
                 tong = 0.3;
             }
             oTime = time - pTime;
